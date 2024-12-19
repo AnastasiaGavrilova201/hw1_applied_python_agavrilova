@@ -7,7 +7,7 @@ import matplotlib.patches as mpatches
 from datetime import datetime
 import polars as pl
 
-st.title("Анализ данных с использованием Streamlit")
+st.title("Анализ температуры")
 st.header("Загрузка данных")
 uploaded_file = st.file_uploader("Выберите CSV-файл c историческими данными о погоде", type=["csv"])
 
