@@ -44,7 +44,7 @@ month_ru = {"winter": "Зима",
 
 # Расчет описательной статистики
 def polars_describe(df):
-    data = pl.DataFrame(df)
+    data = df
     result2 = data.group_by(['city']).agg([
         pl.col('temperature').min().alias('min'),
         pl.col('temperature').max().alias('max'),
@@ -53,7 +53,7 @@ def polars_describe(df):
 
 # Расчет сезонного профиля
 def polars_season_profile(df):
-    data = pl.DataFrame(df)
+    data = df
     result1 = data.group_by(['city', 'season']).agg([
         pl.col('temperature').mean().alias('mean'),
         pl.col('temperature').std().alias('std')])
@@ -61,7 +61,7 @@ def polars_season_profile(df):
 
 # Расчет граничных значений температур для поиска аномалий
 def polars_anomaly(df):
-    polars_df = pl.DataFrame(df)
+    polars_df = df
     polars_df = polars_df.with_columns(
       pl.col('temperature').rolling_mean(window_size=30, min_periods=0).fill_null(pl.col('temperature').first()).alias('SlidingAvg'))
     polars_df = polars_df.with_columns(
@@ -108,7 +108,8 @@ if uploaded_file is not None:
     st.markdown("### Описательная статистика температуры")
 
     # Покажем описательную статистику
-    data1 = data[data['city'] == city]
+    data1 = pl.DataFrame(data)
+    data1 = data1.filter(pl.col("city") == city)
     descriptive_data = pd.DataFrame(polars_describe(data1))
     # Переведем все на русский и округлим значения
     descriptive_data.columns = ['Город', 'Минимум', 'Максимум', 'Среднее']
