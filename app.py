@@ -55,8 +55,8 @@ def polars_describe(df):
 def polars_season_profile(df):
     data = pl.DataFrame(df)
     result1 = data.group_by(['city', 'season']).agg([
-        pl.col('temperature').std().alias('std'),
-        pl.col('temperature').mean().alias('mean')])
+        pl.col('temperature').mean().alias('mean'),
+        pl.col('temperature').std().alias('std')])
     return result1
 
 # Расчет граничных значений температур для поиска аномалий
